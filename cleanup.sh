@@ -6,6 +6,6 @@ do
   if  [[ $line == '#'* ]]; then
     continue
   fi
-  phoronix-test-suite remove-installed-test $line
+  yes | phoronix-test-suite remove-installed-test $line
 done < $testfile
 

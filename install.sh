@@ -22,5 +22,5 @@ do
   if  [[ $line == '#'* ]]; then
     continue
   fi
-  echo $line
+  phoronix-test-suite install-test $line
 done < $testfile

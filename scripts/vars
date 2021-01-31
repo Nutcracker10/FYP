@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+projectRoot='../'
+phoronix='../benchmarks/phoronix-test-suite/'
+testfile='../testfiles/testfile'

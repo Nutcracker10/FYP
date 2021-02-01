@@ -18,10 +18,11 @@ while getopts ":hlqrt" opt; do
     q ) # Quick
       ;;
     
-    r ) # run tests
+    r ) # run tests without install
       ;;
     
     t ) # Edit testfile
+      "${EDITOR:-vi}" ./testfiles/testfile
       ;;
 
     \?)

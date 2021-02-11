@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 . ./vars
 
 while IFS= read -r line

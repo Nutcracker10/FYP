@@ -15,5 +15,8 @@ do
   yes | phoronix-test-suite install-test $line
 done < $testfile
 
+#Ensure correct batch run
+cp ../.user-config.xml ~/.phoronix-test-suite/user-config.xml
+
 echo "Create suite"
 phoronix-test-suite build-suite

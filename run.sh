@@ -11,15 +11,15 @@ if [[ $(id -u) -ne 0 ]]; then
   exit 1
 fi
 
-while getopts ":hlqrt" opt; do
+while getopts ":hlqr" opt; do
   case ${opt} in 
 
     h ) # Help
-      echo "help"
+        echo "help"
       ;;
 
     l ) #List all tests
-      phoronix-test-suite list-all-tests
+        phoronix-test-suite list-all-tests
       ;;
     
     q ) # Quick - Go straight to running tests
@@ -29,19 +29,15 @@ while getopts ":hlqrt" opt; do
       ;;
     
     r ) # Cleanup - Remove installed tests
-      ./scripts/cleanup.sh
-      ;;
-    
-    t ) # Edit testfile
-      "${EDITOR:-vi}" ./testfiles/testfile
+        ./scripts/cleanup.sh
       ;;
 
     \?)
-      echo "Usage: run [-c] [-h] [-q testname] [-r] [-t]"
+       echo "Usage: run [-h] [-q testname] [-r] [-t]"
       ;;
   esac
 done
 
-if (( $OPTIND == 1 )) ; then
+if (( $OPTIND == 1 )); then
   run_install_scripts()
 fi

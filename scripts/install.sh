@@ -2,7 +2,7 @@
 
 . ./vars
 
-if [ -f "$projectRoot/.token" ]; then
+if [ ! -e "$projectRoot/.token" ]; then
   echo "Installing Phoronix..."
   cd $phoronix
   ./install-sh
@@ -19,7 +19,7 @@ fi
 #done < $testfile
 
 #Ensure correct batch run
-cp ../.user-config.xml ~/.phoronix-test-suite/user-config.xml
+cp "../.user-config.xml" "/home/$USER/.phoronix-test-suite/user-config.xml"
 
 echo "Create suite"
 phoronix-test-suite build-suite

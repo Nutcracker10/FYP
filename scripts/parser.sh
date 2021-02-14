@@ -2,10 +2,13 @@
 
 . ./vars
 
-results="~/.phoronix-test-suite/test-results"
 
-testName="$results/*"
+#phoronix-test-suite result-file-to-csv "$testName"
 
-phoronix-test-suite result-file-to-csv "$results/*"
+#ls ~/.phoronix-test-suite/test-results/
 
-mv "~/$testName" "$projectRoot/results"
+for result in "/home/$USER/.phoronix-test-suite/test-results/*"
+do
+  phoronix-test-suite result-file-to-csv  $(basename $result)
+  mv "/home/$USER/$(basename $result).csv" "$projectRoot/results"  
+done

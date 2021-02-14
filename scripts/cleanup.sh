@@ -1,11 +1,13 @@
 #!/bin/bash
-. ./vars
 
-while IFS= read -r line
+for dir in "/home/${SUDO_USER:-${USER}}/.phoronix-test-suite/installed-tests/*"
 do
-  if  [[ $line == '#'* ]]; then
-    continue
-  fi
-  yes | phoronix-test-suite remove-installed-test $line
-done < $testfile
+  
 
+  for p_test in $(ls $dir)
+  do
+    #echo $p_test
+    yes | phoronix-test-suite remove-installed-test $(ls $p_test)
+  done 
+
+done

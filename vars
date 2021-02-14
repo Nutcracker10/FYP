@@ -1,0 +1,4 @@
+#!/bin/bash
+
+projectRoot=/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP/home/jamesk/Programs/FYP""
+phoronix="$projectRoot/benchmarks/phoronix-test-suite/"

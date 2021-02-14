@@ -1,10 +1,13 @@
 #!/bin/bash
 
-. ./vars
+#. ../vars
+
+projectRoot=$(pwd)
+sed -i "s+projectRoot=""+projectRoot="$projectRoot"+" vars
 
 if [ ! -e "$projectRoot/.token" ]; then
   echo "Installing Phoronix..."
-  cd $phoronix
+  cd "$projectRoot/benchmarks/phoronix-test-suite/"
   ./install-sh
   touch $projectRoot/.token
 fi
@@ -19,7 +22,7 @@ fi
 #done < $testfile
 
 #Ensure correct batch run
-cp "../.user-config.xml" "/home/$USER/.phoronix-test-suite/user-config.xml"
+cp "./.user-config.xml" "/home/${SUDO_USER:-${USER}}/.phoronix-test-suite/user-config.xml"
 
-echo "Create suite"
+echo "Create the suite of tests you wish to run"
 phoronix-test-suite build-suite

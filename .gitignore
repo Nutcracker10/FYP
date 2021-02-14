@@ -1,2 +1,4 @@
 testfiles/
 test.sh
+results/
+.token

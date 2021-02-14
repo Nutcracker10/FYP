@@ -1,7 +1,7 @@
 #!/bin/bash
 
 run_install_scripts () {
-  ./scripts/testfile_generate.sh
+  #./scripts/testfile_generate.sh
   ./scripts/install.sh
 }
 
@@ -11,11 +11,8 @@ if [[ $(id -u) -ne 0 ]]; then
   exit 1
 fi
 
-while getopts ":chlqrt" opt; do
+while getopts ":hlqrt" opt; do
   case ${opt} in 
-    c ) # Cleanup - Remove installed tests
-      ./scripts/cleanup.sh
-      ;;
 
     h ) # Help
       echo "help"
@@ -31,6 +28,9 @@ while getopts ":chlqrt" opt; do
         phoronix-test-suite batch-run $test_to_run
       ;;
     
+    r ) # Cleanup - Remove installed tests
+      ./scripts/cleanup.sh
+      ;;
     
     t ) # Edit testfile
       "${EDITOR:-vi}" ./testfiles/testfile

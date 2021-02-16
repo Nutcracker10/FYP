@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./vars
+projectRoot=$(pwd)
 
 #if [[ $(id -u) -ne 0 ]]; then
 #  echo "ERROR: run.sh must be run as root"
@@ -22,6 +22,7 @@ while getopts ":hlqr" opt; do
         echo "Test (suite) to run:"
         read test_to_run
         phoronix-test-suite batch-run $test_to_run
+        ./scripts/parser.sh
       ;;
     
     r ) # Remove installed tests

@@ -21,7 +21,10 @@ while getopts ":hlqr" opt; do
     q ) # Quick - Go straight to running tests
         echo "Test (suite) to run:"
         read test_to_run
+        started=$(date +%s)
         phoronix-test-suite batch-run $test_to_run
+        now=$(date +%s)
+        difference=$(expr $now - $started)
         ./scripts/parser.sh
       ;;
     

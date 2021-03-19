@@ -4,12 +4,8 @@ result=$(basename  "$(ls -t "/home/${SUDO_USER:-${USER}}/.phoronix-test-suite/te
 
 phoronix-test-suite result-file-to-csv $result
 
-#for result in $results
-#do
-#  #echo $result
-#  #basename "$result"
-#  phoronix-test-suite result-file-to-csv  $(basename "$result")
-#done
-  
-mv /home/${SUDO_USER:-${USER}}/*.csv "./results/"
+file=$(ls -Art /home/${SUDO_USER:-${USER}}/*.csv | tail -n 1)
+
+#mv /home/${SUDO_USER:-${USER}}/*.csv "./results/"
+mv $file "./results/"
 echo "Result moved to results/"

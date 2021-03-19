@@ -11,4 +11,5 @@ phoronix-test-suite result-file-to-csv $result
 #  phoronix-test-suite result-file-to-csv  $(basename "$result")
 #done
   
-mv /home/${SUDO_USER:-${USER}}/*.csv "../results/"
+mv /home/${SUDO_USER:-${USER}}/*.csv "./results/"
+echo "Result moved to results/"

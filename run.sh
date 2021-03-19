@@ -38,7 +38,13 @@ done
 
 if (( $OPTIND == 1 )); then
   sudo "./scripts/install.sh"
+  started=$(date +%s)
   #run most recent test suite
   phoronix-test-suite batch-run $(ls -t /home/${SUDO_USER:-${USER}}/.phoronix-test-suite/test-suites/local/ | head -1)
+  now=$(date +%s)
+  difference=$(expr $now - $started)
+  
+  echo "Time taken = $difference"
+
   ./scripts/parser.sh
 fi

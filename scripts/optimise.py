@@ -4,7 +4,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-data = np.random.rand(3, 50)
+data = np.array(np.random.rand(50, 3))
 
 def find_pareto(points):
   points = points[points.sum(1).argsort()[::1]]
@@ -21,7 +21,7 @@ def find_pareto(points):
 
   return points
 
-def print2D(points):
+def print2D(points, data):
   plt.plot(data[0,:], data[1,:], '.b', markersize=16, label= 'Data Set')
   plt.plot(points[0,:], points[1,:], '.r', markersize=16, label= 'Pareto Optimal')
   plt.xlabel('OBJ 1', fontsize=16)
@@ -33,7 +33,23 @@ def print2D(points):
   plt.show()
 
 
-points = find_pareto(data)
-#print(points)
+def print3D(points):
+  fig = plt.figure()
+  ax = fig.add_subplot(111, projection='3d')
 
-print2D(points)
+  x = points[:,0]
+  y = points[:,1]
+  z = points[:,2] * 50
+
+  ax.scatter(x,y,z)
+
+  ax.set_xlabel('OBJ 1', fontsize=16)
+  ax.set_ylabel('OBJ 2', fontsize=16)
+  ax.set_zlabel('OBJ 3', fontsize=16)
+
+  plt.show()
+
+points = find_pareto(data)
+print(points)
+
+print3D(points)

@@ -3,9 +3,8 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import oapackage
 
-data = np.random.rand(4, 50)
+data = np.random.rand(3, 50)
 
 def find_pareto(points):
   points = points[points.sum(1).argsort()[::1]]
@@ -21,30 +20,20 @@ def find_pareto(points):
     points = points[undominated[:n]]
 
   return points
-  
 
-#def find_pareto(points):
-#  pareto=oapackage.ParetoDoubleLong()
-#  for ii in range(0, points.shape[1]):
-#    w=oapackage.doubleVector( (points[0,ii], points[1,ii]) )
-#    pareto.addvalue(w, ii)
-#
-#  pareto.show(verbose=1)
-#  # Plot results
-#  lst=pareto.allindices() # the indices of the Pareto optimal designs
-#
-#  optimal_points=points[:,lst]
-#
-#  h=plt.plot(points[0,:], points[1,:], '.b', markersize=16, label='Non Pareto-optimal')
-#  hp=plt.plot(optimal_points[0,:], optimal_points[1,:], '.r', markersize=16, label='Pareto optimal')
-#  plt.xlabel('Objective 1', fontsize=16)
-#  plt.ylabel('Objective 2', fontsize=16)
-#  plt.xticks([])
-#  plt.yticks([])
-#  _=plt.legend(loc=3, numpoints=1)
+def print2D(points):
+  plt.plot(data[0,:], data[1,:], '.b', markersize=16, label= 'Data Set')
+  plt.plot(points[0,:], points[1,:], '.r', markersize=16, label= 'Pareto Optimal')
+  plt.xlabel('OBJ 1', fontsize=16)
+  plt.ylabel('OBJ 2', fontsize=16)
+  plt.xticks([])
+  plt.yticks([])
+  _=plt.legend(loc=3, numpoints=1)
+
+  plt.show()
+
 
 points = find_pareto(data)
-print(points)
+#print(points)
 
-
-#plt.show()
+print2D(points)

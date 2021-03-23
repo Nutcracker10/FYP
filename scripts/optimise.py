@@ -4,7 +4,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-data = np.array(np.random.rand(50, 3))
+data = np.array(np.random.rand(50, 2))
 
 def find_pareto(points):
   points = points[points.sum(1).argsort()[::1]]
@@ -30,7 +30,8 @@ def print2D(points, data):
   plt.yticks([])
   _=plt.legend(loc=3, numpoints=1)
 
-  plt.show()
+  #plt.show()
+  plt.savefig('./results/result.png')
 
 
 def print3D(points):
@@ -47,9 +48,16 @@ def print3D(points):
   ax.set_ylabel('OBJ 2', fontsize=16)
   ax.set_zlabel('OBJ 3', fontsize=16)
 
-  plt.show()
+  #plt.show()
+  plt.savefig('./results/result.png')
 
 points = find_pareto(data)
-print(points)
 
-print3D(points)
+if (points.shape[1] == 2):
+  print2D(points, data)
+elif (points.shape[1] == 3):
+  print3D(points)
+else :
+  print(points)
+
+np.savetxt("./results/final_result.csv", points, delimiter=",")

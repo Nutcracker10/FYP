@@ -1,4 +1,4 @@
 testfiles/
-test.sh
+*test.*
 results/
 .token

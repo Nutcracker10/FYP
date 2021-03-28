@@ -4,7 +4,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-data = np.array(np.random.rand(50, 2))
+#data = np.array(np.random.rand(50, 3))
+data = np.genfromtxt('./results/results.csv', delimiter=',')
 
 def find_pareto(points):
   points = points[points.sum(1).argsort()[::1]]
@@ -31,10 +32,11 @@ def print2D(points, data):
   _=plt.legend(loc=3, numpoints=1)
 
   #plt.show()
+  plt.legend(loc='upper left')
   plt.savefig('./results/result.png')
 
 
-def print3D(points):
+def print3D(points, data):
   fig = plt.figure()
   ax = fig.add_subplot(111, projection='3d')
 
@@ -42,7 +44,12 @@ def print3D(points):
   y = points[:,1]
   z = points[:,2] * 50
 
-  ax.scatter(x,y,z)
+  x1 = data[:,0]
+  y1 = data[:,1]
+  z1 = data[:,2] * 50
+  
+  ax.scatter(x,y,z, c='r')
+  ax.scatter(x1,y1,z1, c='b')
 
   ax.set_xlabel('OBJ 1', fontsize=16)
   ax.set_ylabel('OBJ 2', fontsize=16)
@@ -56,8 +63,8 @@ points = find_pareto(data)
 if (points.shape[1] == 2):
   print2D(points, data)
 elif (points.shape[1] == 3):
-  print3D(points)
+  print3D(points, data)
 else :
   print(points)
 
-np.savetxt("./results/final_result.csv", points, delimiter=",")
+np.savetxt("./results/optimal_result.csv", points, delimiter=",")

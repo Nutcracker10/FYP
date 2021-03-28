@@ -8,7 +8,7 @@ file=$(ls -Art /home/${SUDO_USER:-${USER}}/*.csv | tail -n 1)
 
 #Pre-process the csv
 sed -i -e '1,24d' $file
-cut --complement -f 1-2 -d, $file >> "./results/results.csv"
+cut --complement -f 1-2 -d, $file >> "./results/test_results.csv"
 
 #mv /home/${SUDO_USER:-${USER}}/*.csv "./results/"
 mv $file "./results/"

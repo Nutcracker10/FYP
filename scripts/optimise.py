@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 #data = np.array(np.random.rand(50, 3))
 data = np.genfromtxt('./results/results.csv', delimiter=',')
 
-def find_pareto(points):
-  points = points[points.sum(1).argsort()[::1]]
+def find_pareto(data):
+  points = data[data.sum(1).argsort()[::1]]
   undominated = np.ones(points.shape[0], dtype=bool)
 
   for i in range(points.shape[0]):
@@ -23,16 +23,18 @@ def find_pareto(points):
   return points
 
 def print2D(points, data):
-  plt.plot(data[0,:], data[1,:], '.b', markersize=16, label= 'Data Set')
-  plt.plot(points[0,:], points[1,:], '.r', markersize=16, label= 'Pareto Optimal')
+  #plt.plot(data[0,:], data[1,:], '.b', markersize=16, label= 'Data Set')
+  #plt.plot(points[0,:], points[1,:], '.r', markersize=16, label= 'Pareto Optimal')
+
+  plt.scatter(points[:,0], points[:,1], c='r')
+  plt.scatter(data[:,0], points[:,1], c='b')
   plt.xlabel('OBJ 1', fontsize=16)
   plt.ylabel('OBJ 2', fontsize=16)
   plt.xticks([])
   plt.yticks([])
-  _=plt.legend(loc=3, numpoints=1)
 
   #plt.show()
-  plt.legend(loc='upper left')
+
   plt.savefig('./results/result.png')
 
 

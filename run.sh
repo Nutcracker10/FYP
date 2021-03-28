@@ -26,6 +26,15 @@ while getopts ":hlqr" opt; do
         now=$(date +%s)
         difference=$(expr $now - $started)
         ./scripts/parser.sh
+        
+        echo "Do you wish to save the time taken to run benchmarks as dimension?"
+        select yn in "Yes" "No"; do
+          case $yn in 
+            Yes) echo $difference"," >> "./results/test_results.csv"; break;;
+            No) exit;;
+          esac
+        done
+      
       ;;
     
     r ) # Remove installed tests
@@ -47,7 +56,14 @@ if (( $OPTIND == 1 )); then
   now=$(date +%s)
   difference=$(expr $now - $started)
   
-  echo "Time taken = $difference"
-
   ./scripts/parser.sh
+  
+  echo "Do you wish to save the time taken to run benchmarks as dimension?"
+  select yn in "Yes" "No"; do
+    case $yn in 
+      Yes) echo $difference"," >> "./results/test_results.csv"; break;;
+      No) exit;;
+    esac
+  done
+
 fi

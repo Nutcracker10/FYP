@@ -61,9 +61,19 @@ if (( $OPTIND == 1 )); then
   echo "Do you wish to save the time taken to run benchmarks as dimension?"
   select yn in "Yes" "No"; do
     case $yn in 
-      Yes) echo $difference"," >> "./results/test_results.csv"; break;;
-      No) exit;;
+      Yes)  echo "$difference," >> "./results/test_results.csv"; break;;
+      No)   exit;;
     esac
   done
+
+  echo "Do you wish to add a dimension?"
+  select yn in "Yes" "No"; do
+    case $yn in 
+      Yes)  echo "Enter value: ";
+            read value ;
+            echo "$value," >> "./results/test_results.csv";
+            break;;
+
+      No) exit;;
 
 fi

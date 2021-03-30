@@ -1,5 +1,30 @@
 PHORONIX TEST SUITE CHANGE-LOG
 
+Phoronix Test Suite 10.2.2
+17 February 2021
+
+pts-core: Add helper text when hitting a download with no working mirrors
+pts-core: Various external dependency updates
+pts-core: Add enable-repo sub-command for more easily enabling new OpenBenchmarking.org repos
+pts-core: Result viewer fix for the limit drop down menu potentially not being activated in some cases
+pts-core: Allow renaming runs within the result viewer
+phoromatic: Ensure pcntl_signal is present before starting Phoromatic Server
+phoromatic: PHP 8 compatibility fixes
+phodevi: Fix display driver name potentially being reported inaccurate for some obscure graphics cards / driver configurations
+phodevi: Export current GPU graphics card PCI device ID (GPU_DEVICE_ID) for some games/tests relying on it for configuration
+
+Phoronix Test Suite 10.2.1
+1 February 2021
+
+pts-core: Add "InstallRequiresInternet" option for test profiles that is more narrow (install time only) than the existing "RequiresInternet"
+pts-core: Add check-tests sub-command
+pts-core: Fix possible crash on PDF output
+pts-core: Various small fixes and tweaks
+pts-core: Fix PHP8 + cURL download error
+pts_Graph: A number of minor SVG standards compliance updates
+phodevi: Log Transparent Huge Pages setting as part of system details
+phodevi: Don't bother parsing the X.org log if it grows too big
+
 Phoronix Test Suite 10.2.0
 5 January 2021
 

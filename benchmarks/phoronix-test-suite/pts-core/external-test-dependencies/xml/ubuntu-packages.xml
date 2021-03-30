@@ -152,7 +152,7 @@
 		<Package>
 			<GenericName>perl-opengl</GenericName>
 			<PackageName>libopengl-perl</PackageName>
-			<FileCheck>perl5/auto/OpenGL/OpenGL.so</FileCheck>
+			<FileCheck>perl5/auto/OpenGL/OpenGL.so OR /usr/lib/x86_64-linux-gnu/perl5/5.30/OpenGL/Config.pm</FileCheck>
 		</Package>
 		<Package>
 			<GenericName>xorg-video</GenericName>
@@ -179,13 +179,8 @@
 			<PackageName>p7zip-full</PackageName>
 		</Package>
 		<Package>
-			<GenericName>qt4-development</GenericName>
-			<PackageName>libqt4-dev libqt4-opengl-dev</PackageName>
-			<FileCheck>qmake-qt4, qt4/Qt/qgl.h</FileCheck>
-		</Package>
-		<Package>
 			<GenericName>qt5-development</GenericName>
-			<PackageName>qml-module-qtquick2 qtdeclarative5-dev qt5-default qtbase5-dev qt5svg5-dev qttools5-dev libqca-qt5-2-dev qt5keychain-dev pyqt5-dev pyqt5-dev-tools qtpositioning5-dev</PackageName>
+			<PackageName>qml-module-qtquick2 qtdeclarative5-dev qt5-default qtbase5-dev libqt5svg5-dev qttools5-dev libqca-qt5-2-dev qt5keychain-dev pyqt5-dev pyqt5-dev-tools qtpositioning5-dev</PackageName>
 			<FileCheck>qmake</FileCheck>
 		</Package>
 		<Package>

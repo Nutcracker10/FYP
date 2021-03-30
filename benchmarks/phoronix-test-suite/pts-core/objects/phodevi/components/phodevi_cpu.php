@@ -851,13 +851,15 @@ class phodevi_cpu extends phodevi_device_interface
 			'xop' => (1 << 13), // AMD XOP Instruction Set
 			'fma3' => (1 << 14), // FMA3 Instruction Set
 			'fma4' => (1 << 15), // FMA4 Instruction Set
-			'rdrand' => (1 << 16), // Intel Bull Mountain RDRAND - Ivy Bridge
-			'fsgsbase' => (1 << 17), // FSGSBASE - Ivy Bridge AVX
-			'bmi2' => (1 << 18), // Intel Haswell has BMI2
-			'avx512cd' => (1 << 19), // AVX-512
-			'avx512_vnni' => (1 << 20), // AVX-512 VNNI (DL BOOST)
-			'avx512_bf16' => (1 << 21), // AVX-512 BFloat16
-			'amx_tile' => (1 << 22), // AMX
+			'fma' => (1 << 16), // FMA4 Instruction Set
+			'rdrand' => (1 << 17), // Intel Bull Mountain RDRAND - Ivy Bridge
+			'fsgsbase' => (1 << 18), // FSGSBASE - Ivy Bridge AVX
+			'bmi2' => (1 << 19), // Intel Haswell has BMI2
+			'avx512cd' => (1 << 20), // AVX-512
+			'avx512_vnni' => (1 << 21), // AVX-512 VNNI (DL BOOST)
+			'avx512_bf16' => (1 << 22), // AVX-512 BFloat16
+			'amx_tile' => (1 << 23), // AMX
+			'vaes' => (1 << 24),
 			);
 	}
 	public static function prominent_cpu_features()
@@ -867,8 +869,10 @@ class phodevi_cpu extends phodevi_device_interface
 			'avx' => 'AVX', // AVX
 			'avx2' => 'AVX2', // AVX2
 			'aes' => 'AES', // AES
+			'vaes' => 'VAES', // AES
 			'svm' => 'AMD SVM', // AMD SVM (Virtualization)
 			'vmx' => 'Intel VT-d', // Intel Virtualization
+			'fma' => 'FMA', // FMA Instruction Set
 			'fma3' => 'FMA3', // FMA3 Instruction Set
 			'fma4' => 'FMA4', // FMA4 Instruction Set
 			'rdrand' => 'RdRand', // Intel Bull Mountain RDRAND - Ivy Bridge
@@ -878,6 +882,62 @@ class phodevi_cpu extends phodevi_device_interface
 			'avx512_vnni' => 'AVX-512 VNNI / DL-BOOST', // AVX-512 VNNI (DL BOOST)
 			'avx512_bf16' => 'AVX-512 BFloat16', // AVX-512 BFloat16
 			'amx_tile' => 'AMX', // Advanced Matrix Extensions
+			);
+	}
+	public static function interesting_instructions()
+	{
+		return array(
+		'MMX' => array('emms', 'maskmovq', 'movq', 'movntq', 'packssdw', 'packsswb', 'packuswb', 'paddb', 'paddd', 'paddsb', 'paddsw', 'paddusb', 'paddusw', 'paddw', 'pand', 'pandn', 'pavgusb', 'pavgb', 'pavgw', 'pcmpeqb', 'pcmpeqd', 'pcmpeqw', 'pcmpgtb', 'pcmpgtd', 'pcmpgtw', 'pextrw', 'pinsrw', 'pmaddwd', 'pmaxsw', 'pmaxub', 'pminsw', 'pminub', 'pmovmskb', 'pmulhw', 'pmullw', 'pmulhuw', 'por', 'psadbw', 'pshufw', 'pslld', 'psllq', 'psllw', 'psrad', 'psraw', 'psrld', 'psrlq', 'psrlw', 'psubb', 'psubd', 'psubsb', 'psubsw', 'psubusb', 'psubusw', 'psubw', 'punpckhbw', 'punpckhdq', 'punpckhwd', 'punpcklbw', 'punpckldq', 'punpcklwd', 'pxor'),
+		'SSE' => array('addps', 'addss', 'andnps', 'andps', 'cmpeqps', 'cmpeqss', 'cmpleps', 'cmpless', 'cmpltps', 'cmpltss', 'cmpneqps', 'cmpneqss', 'cmpnleps', 'cmpnless', 'cmpnltps', 'cmpnltss', 'cmpordps', 'cmpordss', 'cmpps', 'cmpss', 'cmpunordps', 'cmpunordss', 'comiss', 'cvtpi2ps', 'cvtps2pi', 'cvtsi2ss', 'cvtss2si', 'cvttps2pi', 'cvttss2si', 'divps', 'divss', 'ldmxcsr', 'maxps', 'maxss', 'minps', 'minss', 'movaps', 'movhlps', 'movhps', 'movlhps', 'movlps', 'movmskps', 'movntps', 'movss', 'movups', 'mulps', 'mulss', 'orps', 'rcpps', 'rcpss', 'rsqrtps', 'rsqrtss', 'shufps', 'sqrtps', 'sqrtss', 'stmxcsr', 'subps', 'subss', 'ucomiss', 'unpckhps', 'unpcklps', 'xorps'),
+		'SSE2' => array('addpd', 'addsd', 'andnpd', 'andpd', 'clflush', 'cmpeqpd', 'cmpeqsd', 'cmplepd', 'cmplesd', 'cmpltpd', 'cmpltsd', 'cmpneqpd', 'cmpneqsd', 'cmpnlepd', 'cmpnlesd', 'cmpnltpd', 'cmpnltsd', 'cmpordpd', 'cmpordsd', 'cmppd', 'cmpunordpd', 'cmpunordsd', 'comisd', 'cvtdq2pd', 'cvtdq2ps', 'cvtpd2dq', 'cvtpd2pi', 'cvtpd2ps', 'cvtpi2pd', 'cvtps2dq', 'cvtps2pd', 'cvtsd2si', 'cvtsd2ss', 'cvtsi2sd', 'cvtss2sd', 'cvttpd2dq', 'cvttpd2pi', 'cvttps2dq', 'cvttsd2si', 'divpd', 'divsd', 'maskmovdqu', 'maxpd', 'maxsd', 'minpd', 'minsd', 'movapd', 'movdq2q', 'movdqa', 'movdqu', 'movhpd', 'movlpd', 'movmskpd', 'movntdq', 'movnti', 'movntpd', 'movq2dq', 'movupd', 'mulpd', 'mulsd', 'orpd', 'paddq', 'pmuludq', 'pshufd', 'pshufhw', 'pshuflw', 'pslldq', 'psrldq', 'psubq', 'punpckhqdq', 'punpcklqdq', 'shufpd', 'sqrtpd', 'sqrtsd', 'subpd', 'subsd', 'ucomisd', 'unpckhpd', 'unpcklpd', 'xorpd', 'movd'),
+		'SSE3' => array('addsubpd', 'addsubps', 'fisttp', 'haddpd', 'haddps', 'hsubpd', 'hsubps', 'lddqu', 'monitor', 'movddup', 'movshdup', 'movsldup', 'mwait'),
+		'SSSE3' => array('pabsb', 'pabsd', 'pabsw', 'palignr', 'phaddd', 'phaddsw', 'phaddw', 'phsubd', 'phsubsw', 'phsubw', 'pmaddubsw', 'pmulhrsw', 'pshufb', 'psignb', 'psignd', 'psignw'),
+		'SSE4_1' => array('blendpd', 'blendps', 'blendvpd', 'blendvps', 'dppd', 'dpps', 'extractps', 'insertps', 'movntdqa', 'mpsadbw', 'packusdw', 'pblendvb', 'pblendw', 'pcmpeqq', 'pextrb', 'pextrd', 'pextrq', 'phminposuw', 'pinsrb', 'pinsrd', 'pinsrq', 'pmaxsb', 'pmaxsd', 'pmaxud', 'pmaxuw', 'pminsb', 'pminsd', 'pminud', 'pminuw', 'pmovsxbd', 'pmovsxbq', 'pmovsxbw', 'pmovsxdq', 'pmovsxwd', 'pmovsxwq', 'pmovzxbd', 'pmovzxbq', 'pmovzxbw', 'pmovzxdq', 'pmovzxwd', 'pmovzxwq', 'pmuldq', 'pmulld', 'ptest', 'roundpd', 'roundps', 'roundsd', 'roundss'),
+		'SSE4_2' => array('crc32', 'pcmpestri', 'pcmpestrm', 'pcmpgtq', 'pcmpistri', 'pcmpistrm', 'popcnt'),
+		'SSE4A' => array('extrq', 'insertq', 'movntsd', 'movntss'),
+		'AVX' => 'VBROADCASTSS VBROADCASTSD VBROADCASTF128 VINSERTF128 VEXTRACTF128 VMASKMOVPS VPERMILPS VPERMILPD VPERM2F128 VZEROALL VZEROUPPER',
+		'AVX2' => 'VPBROADCASTB VPBROADCASTW VPBROADCASTD VPBROADCASTQ VINSERTI128 VEXTRACTI128 VGATHERDPD VGATHERQPD VGATHERDPS VGATHERQPS VPGATHERDD VPGATHERDQ VPGATHERQD VPGATHERQQ VPMASKMOVD VPMASKMOVQ VPERMPS VPERMD VPERMPD VPERMQ VPERM2I128 VPBLENDD VPSLLVD VPSLLVQ  VPSRLVD VPSRLVQ  VPSRAVD',
+		'AES' => 'AESENC AESENCLAST AESDEC AESDECLAST AESKEYGENASSIST AESIMC',
+		'AVX512' => 'AVX512F AVX512CD AVX512DQ AVX512PF AVX512ER AVX512VL AVX512BW AVX512IFMA AVX512VBMI AVX512VBMI2 AVX512VAES AVX512BITALG AVX5124FMAPS AVX512VPCLMULQDQ AVX512GFNI AVX512_VNNI AVX5124VNNIW AVX512VPOPCNTDQ AVX512_BF16 avx512vp2intersect',
+		'VAES' => 'VAESDEC VAESDECLAST VAESENC VAESENCLAST VPCLMULQDQ',
+		'AVX-VNNI' => 'vpdpbusd vpdpwssd vpdpbusds vpdpwssds',
+		'SERIALIZE' => 'serialize',
+		'WAITPKG' => 'umwait tpause umonitor',
+		'ENQCMD' => 'enqcmd enqcmds',
+		'MOVDIRI' => 'movdiri movdir64b',
+		'CLWB' => 'clwb',
+		'RDPRU' => 'rdpru',
+		'FSGSBASE' => 'RDFSBASE RDGSBASE WRFSBASE WRGSBASE',
+		'AMX' => 'LDTILECFG STTILECFG TILELOADD TILELOADDT1 TILESTORED TILERELEASE TILEZERO TDPBF16PS',
+		'FMA' => array('vfmadd123pd', 'vfmadd123ps', 'vfmadd123sd', 'vfmadd123ss', 'vfmadd132pd', 'vfmadd132ps', 'vfmadd132sd', 'vfmadd132ss', 'vfmadd213pd', 'vfmadd213ps', 'vfmadd213sd', 'vfmadd213ss', 'vfmadd231pd', 'vfmadd231ps', 'vfmadd231sd', 'vfmadd231ss', 'vfmadd312pd', 'vfmadd312ps', 'vfmadd312sd', 'vfmadd312ss', 'vfmadd321pd', 'vfmadd321ps', 'vfmadd321sd', 'vfmadd321ss', 'vfmaddsub123pd', 'vfmaddsub123ps', 'vfmaddsub132pd', 'vfmaddsub132ps', 'vfmaddsub213pd', 'vfmaddsub213ps', 'vfmaddsub231pd', 'vfmaddsub231ps', 'vfmaddsub312pd', 'vfmaddsub312ps', 'vfmaddsub321pd', 'vfmaddsub321ps', 'vfmsub123pd', 'vfmsub123ps', 'vfmsub123sd', 'vfmsub123ss', 'vfmsub132pd', 'vfmsub132ps', 'vfmsub132sd', 'vfmsub132ss', 'vfmsub213pd', 'vfmsub213ps', 'vfmsub213sd', 'vfmsub213ss', 'vfmsub231pd', 'vfmsub231ps', 'vfmsub231sd', 'vfmsub231ss', 'vfmsub312pd', 'vfmsub312ps', 'vfmsub312sd', 'vfmsub312ss', 'vfmsub321pd', 'vfmsub321ps', 'vfmsub321sd', 'vfmsub321ss', 'vfmsubadd123pd', 'vfmsubadd123ps', 'vfmsubadd132pd', 'vfmsubadd132ps', 'vfmsubadd213pd', 'vfmsubadd213ps', 'vfmsubadd231pd', 'vfmsubadd231ps', 'vfmsubadd312pd', 'vfmsubadd312ps', 'vfmsubadd321pd', 'vfmsubadd321ps', 'vfnmadd123pd', 'vfnmadd123ps', 'vfnmadd123sd', 'vfnmadd123ss', 'vfnmadd132pd', 'vfnmadd132ps', 'vfnmadd132sd', 'vfnmadd132ss', 'vfnmadd213pd', 'vfnmadd213ps', 'vfnmadd213sd', 'vfnmadd213ss', 'vfnmadd231pd', 'vfnmadd231ps', 'vfnmadd231sd', 'vfnmadd231ss', 'vfnmadd312pd', 'vfnmadd312ps', 'vfnmadd312sd', 'vfnmadd312ss', 'vfnmadd321pd', 'vfnmadd321ps', 'vfnmadd321sd', 'vfnmadd321ss', 'vfnmsub123pd', 'vfnmsub123ps', 'vfnmsub123sd', 'vfnmsub123ss', 'vfnmsub132pd', 'vfnmsub132ps', 'vfnmsub132sd', 'vfnmsub132ss', 'vfnmsub213pd', 'vfnmsub213ps', 'vfnmsub213sd', 'vfnmsub213ss', 'vfnmsub231pd', 'vfnmsub231ps', 'vfnmsub231sd', 'vfnmsub231ss', 'vfnmsub312pd', 'vfnmsub312ps', 'vfnmsub312sd', 'vfnmsub312ss', 'vfnmsub321pd', 'vfnmsub321ps', 'vfnmsub321sd', 'vfnmsub321ss'),
+		'BMI2' => 'BZHI MULX PDEP PEXT RORX SARX SHRX SHLX',
+		);
+	}
+	public static function interesting_instructions_names()
+	{
+		return array(
+			//'MMX' => 'MMX',
+			'SSE2' => 'SSE2',
+			'SSE3' => 'SSE3',
+			'SSSE3' => 'SSSE3',
+			'SSE4_2' => 'SSE 4.2',
+			'SSE4A' => 'SSE4A',
+			'AVX' => 'Advanced Vector Extensions',
+			'AVX2' => 'Advanced Vector Extensions 2',
+			'AVX512' => 'Advanced Vector Extensions 512',
+			'AMX' => 'Advanced Matrix Extensions',
+			'AES' => 'Advanced Encryption Standard',
+			'VAES' => 'Vector AES',
+			'AVX-VNNI' => 'AVX Vector Neural Network Instructions',
+			'SERIALIZE' => 'SERIALIZE',
+			'WAITPKG' => 'WAITPKG / UMWAIT / TPAUSE',
+			'ENQCMD' => 'Data Streaming Accelerator',
+			'FSGSBASE' => 'FSGSBASE',
+			'MOVDIRI' => 'MOVDIRx',
+			'CLWB' => 'Cache Line Write Back',
+			'RDPRU' => 'Read Processor Register',
+			'FMA' => 'FMA',
+			'BMI2' => 'Bit Manipulation Instruction Set 2',
 			);
 	}
 	public static function prominent_cpu_bugs()
@@ -1025,6 +1085,7 @@ class phodevi_cpu extends phodevi_device_interface
 				32 => 'Zen 3',
 				33 => 'Zen 3',
 				47 => 'Zen 3',
+				48 => 'Zen 3',
 				),
 			);
 
@@ -1092,6 +1153,7 @@ class phodevi_cpu extends phodevi_device_interface
 				143 => 'Sapphire Rapids',
 				150 => 'Elkhart Lake',
 				151 => 'Alder Lake',
+				154 => 'Alder Lake',
 				156 => 'Jasper Lake',
 				157 => 'Ice Lake',
 				158 => 'Kaby/Coffee/Whiskey Lake',
@@ -1125,7 +1187,7 @@ class phodevi_cpu extends phodevi_device_interface
 				),
 			);
 
-		if(($cpu_string == null || strpos($cpu_string, 'AMD') !== false) && isset($amd_map[$family][$model]))
+		if(($cpu_string == null || strpos($cpu_string, 'AMD') !== false || strpos($cpu_string, ' Athlon') !== false) && isset($amd_map[$family][$model]))
 		{
 			return $amd_map[$family][$model];
 		}

@@ -3,8 +3,8 @@
 /*
 	Phoronix Test Suite
 	URLs: http://www.phoronix.com, http://www.phoronix-test-suite.com/
-	Copyright (C) 2008 - 2020, Phoronix Media
-	Copyright (C) 2008 - 2020, Michael Larabel
+	Copyright (C) 2008 - 2021, Phoronix Media
+	Copyright (C) 2008 - 2021, Michael Larabel
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -197,6 +197,8 @@ class pts_client
 			PTS_TEST_PROFILE_PATH . 'local/',
 			PTS_TEST_SUITE_PATH . 'local/'
 			);
+		
+		$tp_pts_dir_not = is_dir(PTS_TEST_PROFILE_PATH . 'pts/');
 
 		foreach($directory_check as $dir)
 		{
@@ -204,7 +206,7 @@ class pts_client
 		}
 
 		// Copy files (without overwrite) from internal OB program cache if present, to help those without Internet
-		if(!phodevi::is_windows())
+		if(!phodevi::is_windows() && (FIRST_RUN_ON_PTS_UPGRADE || !$tp_pts_dir_not))
 		{
 			if(PTS_INTERNAL_OB_CACHE && is_dir(PTS_INTERNAL_OB_CACHE . 'test-profiles'))
 			{
@@ -368,6 +370,7 @@ class pts_client
 			'SYSTEM_TYPE' => phodevi_base::system_type_to_string(phodevi_base::determine_system_type(phodevi::system_hardware(), phodevi::system_software())),
 			'TERMINAL_WIDTH' => pts_client::terminal_width(),
 			'C_CXX_FLAGS_DEFAULT' => '-O3 -march=native', // mostly for future use
+			'GPU_DEVICE_ID' => phodevi::read_property('gpu', 'device-id'),
 			//'PATH' => pts_client::get_path()
 			);
 
@@ -1555,12 +1558,12 @@ class pts_client
 
 		if($supports_passing_a_test)
 		{
-			$tests_to_show = array_keys(pts_openbenchmarking_client::new_and_recently_updated_tests(14, 31, true));
+			$tests_to_show = array_keys(pts_openbenchmarking_client::new_and_recently_updated_tests(30, 31, true));
 			$tests_to_show_title = 'New Tests';
 
 			if(count($tests_to_show) < 3)
 			{
-				$tests_to_show = array_keys(pts_openbenchmarking_client::new_and_recently_updated_tests(14, 31));
+				$tests_to_show = array_keys(pts_openbenchmarking_client::new_and_recently_updated_tests(60, 31));
 				$tests_to_show_title = 'New + Updated Tests';
 			}
 
@@ -1576,7 +1579,7 @@ class pts_client
 				$terminal_width = pts_client::terminal_width();
 				$tests_per_line = floor($terminal_width / $longest_test);
 				shuffle($tests_to_show);
-				$tests_to_show = array_slice($tests_to_show, 0, min(count($tests_to_show), $tests_per_line * 2 -1));
+				$tests_to_show = array_slice($tests_to_show, 0, min(count($tests_to_show), $tests_per_line * 3 - 1));
 
 				echo pts_client::cli_just_bold($tests_to_show_title . ':') . PHP_EOL;
 				$i = 0;
@@ -1586,12 +1589,16 @@ class pts_client
 					{
 						echo '   ';
 					}
-					echo $test . str_repeat(' ', $longest_test - strlen($test));
+					echo $test;
 
 					$i++;
 					if($i % $tests_per_line == 0 || $i == count($tests_to_show))
 					{
 						echo PHP_EOL;
+					}
+					else
+					{
+						echo str_repeat(' ', $longest_test - strlen($test));
 					}
 				}
 			}

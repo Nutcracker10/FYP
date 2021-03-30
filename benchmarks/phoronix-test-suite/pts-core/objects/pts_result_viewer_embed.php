@@ -87,7 +87,7 @@ class pts_result_viewer_embed
 			$PAGE .= ' <input type="submit" value="Delete Result File" onclick="javascript:delete_result_file(\'' . $this->result_public_id . '\'); return false;">';
 		}
 		$PAGE .= $this->post_description_message;
-		$PAGE .= '<p align="center">Jump To <a href="#table">Table</a> - <a href="#results">Results</a></p>';
+		$PAGE .= '<div style="text-align: center;">Jump To <a href="#table">Table</a> - <a href="#results">Results</a></div>';
 		$PAGE .= '<hr /><div style="font-size: 12pt;">' . $html_options . '</div><hr style="clear: both;" />';
 		$PAGE .= pts_result_viewer_settings::process_helper_html($_REQUEST, $result_file, $extra_attributes);
 		$PAGE .= '</div>';
@@ -142,7 +142,7 @@ class pts_result_viewer_embed
 				}
 			}
 		}
-		$PAGE .= '<a name="table"></a>';
+		//$PAGE .= '<a id="table"></a>';
 		if(!$result_file->is_multi_way_comparison() && $this->show_html_table_when_relevant)
 		{
 			$PAGE .= '<div class="pts_result_table">' . pts_result_file_output::result_file_to_detailed_html_table($result_file, 'grid', $extra_attributes, pts_result_viewer_settings::check_request_for_var($_REQUEST, 'sdt')) . '</div>';
@@ -157,7 +157,7 @@ class pts_result_viewer_embed
 		}
 		$PAGE .= '</div>';
 
-		$PAGE .= '<a name="table"></a><div id="results">';
+		$PAGE .= '<a id="table"></a><div id="results">';
 		$prev_title = null;
 
 		$identifier_mapping_to_cores = array();
@@ -225,7 +225,7 @@ class pts_result_viewer_embed
 			{
 				continue;
 			}
-			$PAGE .= '<a name="r-' . $i . '"></a><div style="text-align: center;" id="result-' . $i . '">';
+			$PAGE .= '<a id="r-' . $i . '"></a><div style="text-align: center;" id="result-' . $i . '">';
 
 			//
 			// DISPLAY TEST PORIFLE METADATA HELPER
@@ -236,7 +236,7 @@ class pts_result_viewer_embed
 				if(is_file(PTS_INTERNAL_OB_CACHE . 'test-profiles/' . $result_object->test_profile->get_identifier() . '/test-definition.xml'))
 				{
 					$tp = new pts_test_profile(PTS_INTERNAL_OB_CACHE . 'test-profiles/' . $result_object->test_profile->get_identifier() . '/test-definition.xml');
-					$PAGE .= '<p class="mini">' . $tp->get_description() . ' <a href="https://openbenchmarking.org/test/' . $result_object->test_profile->get_identifier() . '"><em class="hide_on_print">Learn more via the OpenBenchmarking.org test page</em></a>.</p>';
+					$PAGE .= '<p class="mini">' . $tp->get_description() . ' <a href="https://openbenchmarking.org/test/' . $result_object->test_profile->get_identifier(false) . '"><em class="hide_on_print">Learn more via the OpenBenchmarking.org test page</em></a>.</p>';
 
 				/*	$suites_containing_test = pts_test_suites::suites_containing_test_profile($result_object->test_profile);
 					if(!empty($suites_containing_test))

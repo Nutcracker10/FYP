@@ -3,8 +3,8 @@
 /*
 	Phoronix Test Suite
 	URLs: http://www.phoronix.com, http://www.phoronix-test-suite.com/
-	Copyright (C) 2010 - 2020, Phoronix Media
-	Copyright (C) 2010 - 2020, Michael Larabel
+	Copyright (C) 2010 - 2021, Phoronix Media
+	Copyright (C) 2010 - 2021, Michael Larabel
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -499,6 +499,20 @@ class pts_test_installer
 
 								if(!$try_again)
 								{
+									pts_client::$display->test_install_prompt('If able to locate the file elsewhere, place it in the download cache and re-run the command.' . PHP_EOL . PHP_EOL);
+									pts_client::$display->test_install_prompt(pts_client::cli_just_bold('Download Cache: ') . pts_client::download_cache_path() . PHP_EOL);
+									if($download_package->get_filename() != null)
+									{
+										pts_client::$display->test_install_prompt(pts_client::cli_just_bold('File Name: ') . $download_package->get_filename() . PHP_EOL);
+									}
+									if($download_package->get_sha256() != null)
+									{
+										pts_client::$display->test_install_prompt(pts_client::cli_just_bold('SHA256: ') . $download_package->get_sha256() . PHP_EOL);
+									}
+									else if($download_package->get_md5() != null)
+									{
+										pts_client::$display->test_install_prompt(pts_client::cli_just_bold('MD5: ') . $download_package->get_md5() . PHP_EOL);
+									}
 									//self::test_install_error(null, $test_install_request, 'Download of Needed Test Dependencies Failed!');
 									return false;
 								}
@@ -781,7 +795,11 @@ class pts_test_installer
 		pts_file_io::mkdir($test_install_directory);
 		$installed = false;
 
-		if(ceil(disk_free_space($test_install_directory) / 1048576) < ($test_install_request->test_profile->get_download_size() + 128))
+		if($test_install_request->test_profile->is_internet_required_for_install() && !pts_network::internet_support_available())
+		{
+			self::test_install_error(null, $test_install_request, 'This test profile requires a working/active Internet connection to install.');
+		}
+		else if(ceil(disk_free_space($test_install_directory) / 1048576) < ($test_install_request->test_profile->get_download_size() + 128))
 		{
 			self::test_install_error(null, $test_install_request, 'There is not enough space at ' . $test_install_directory . ' for the test files.');
 		}

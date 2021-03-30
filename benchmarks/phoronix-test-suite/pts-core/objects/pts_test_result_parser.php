@@ -221,9 +221,10 @@ class pts_test_result_parser
 		foreach($definitions->get_system_monitor_definitions() as $entry)
 		{
 			$frame_all_times = array();
-			switch($entry->get_identifier())
+			switch(($eid = $entry->get_identifier()))
 			{
 				case 'libframetime-output':
+				case 'libframetime-output-no-limit':
 					// libframetime output
 					$line_values = explode(PHP_EOL, file_get_contents($test_log_file));
 					if(!empty($line_values) && isset($line_values[3]))
@@ -234,7 +235,7 @@ class pts_test_result_parser
 							{
 								$frametime = substr($v, 10);
 								$frametime = substr($frametime, 0, -3);
-								if($frametime > 2000)
+								if($eid == 'libframetime-output-no-limit' || $frametime > 2000)
 								{
 									$frametime = $frametime / 1000;
 									$frame_all_times[] = $frametime;
@@ -697,7 +698,7 @@ class pts_test_result_parser
 							{
 								$possible_res = $r[($before_this - 1)];
 								self::strip_result_cleaner($possible_res, $e);
-								if($before_this !== false && (!$is_numeric_check || self::valid_numeric_input_handler($possible_res)))
+								if($before_this !== false && (!$is_numeric_check || self::valid_numeric_input_handler($possible_res, $line)))
 								{
 									$test_results[] = $possible_res;
 								}
@@ -718,7 +719,7 @@ class pts_test_result_parser
 										continue;
 									}
 									self::strip_result_cleaner($r[$f], $e);
-									if(!$is_numeric_check || self::valid_numeric_input_handler($r[$f]))
+									if(!$is_numeric_check || self::valid_numeric_input_handler($r[$f], $line))
 									{
 										$test_results[] = $r[$f];
 									}
@@ -729,58 +730,9 @@ class pts_test_result_parser
 						else if(isset($r[$template_r_pos]))
 						{
 							self::strip_result_cleaner($r[$template_r_pos], $e);
-							if(!$is_numeric_check || self::valid_numeric_input_handler($r[$template_r_pos]))
+							if(!$is_numeric_check || self::valid_numeric_input_handler($r[$template_r_pos], $line))
 							{
 								$test_results[] = $r[$template_r_pos];
-							}
-							else if($is_numeric_check && strpos($r[$template_r_pos], ':') !== false && strpos($r[$template_r_pos], '.') !== false && is_numeric(str_replace(array(':', '.'), null, $r[$template_r_pos])) && stripos($line, 'time') !== false)
-							{
-								// Convert e.g. 03:03.17 to seconds, relevant for at least pts/blender
-								$seconds = 0;
-								$formatted_time = $r[$template_r_pos];
-								if(($c = strpos($formatted_time, ':')) !== false && strrpos($formatted_time, ':') == $c && is_numeric(substr($formatted_time, 0, $c)))
-								{
-									$seconds = (substr($formatted_time, 0, $c) * 60) + substr($formatted_time, ($c + 1));
-								}
-								if(!empty($seconds))
-								{
-									$test_results[] = $seconds;
-								}
-							}
-							else if($is_numeric_check && strpos($r[$template_r_pos], ':') !== false && strtolower(substr($r[$template_r_pos], -1)) == 's')
-							{
-								// e.g. 01h:04m:33s
-								$seconds = 0;
-								$invalid = false;
-								foreach(explode(':', $r[$template_r_pos]) as $time_segment)
-								{
-									$postfix = strtolower(substr($time_segment, -1));
-									$value = substr($time_segment, 0, -1);
-									if($value == 0 || !is_numeric($value))
-									{
-										continue;
-									}
-									switch($postfix)
-									{
-										case 'h':
-											$seconds += ($value * 3600);
-											break;
-										case 'm':
-											$seconds += ($value * 60);
-											break;
-										case 's':
-											$seconds += $value;
-											break;
-										default:
-											$invalid = true;
-											break;
-									}
-								}
-
-								if(!empty($seconds) && $seconds > 0 && !$invalid)
-								{
-									$test_results[] = $seconds;
-								}
 							}
 						}
 						else
@@ -969,7 +921,7 @@ class pts_test_result_parser
 		pts_test_result_parser::debug_message('Test Result Parser Returning: ' . $test_result);
 		return $test_result;
 	}
-	protected static function valid_numeric_input_handler(&$numeric_input)
+	protected static function valid_numeric_input_handler(&$numeric_input, $line)
 	{
 		if(is_numeric($numeric_input))
 		{
@@ -999,6 +951,56 @@ class pts_test_result_parser
 			if($vtime > 0 && is_numeric($vtime))
 			{
 				$numeric_input = $vtime;
+				return true;
+			}
+		}
+		else if(strpos($numeric_input, ':') !== false && strpos($numeric_input, '.') !== false && is_numeric(str_replace(array(':', '.'), null, $numeric_input)) && stripos($line, 'time') !== false)
+		{
+			// Convert e.g. 03:03.17 to seconds, relevant for at least pts/blender
+			$seconds = 0;
+			$formatted_time = $numeric_input;
+			if(($c = strpos($formatted_time, ':')) !== false && strrpos($formatted_time, ':') == $c && is_numeric(substr($formatted_time, 0, $c)))
+			{
+				$seconds = (substr($formatted_time, 0, $c) * 60) + substr($formatted_time, ($c + 1));
+			}
+			if(!empty($seconds))
+			{
+				$numeric_input = $seconds;
+				return true;
+			}
+		}
+		else if(strpos($numeric_input, ':') !== false && strtolower(substr($numeric_input, -1)) == 's')
+		{
+			// e.g. 01h:04m:33s
+			$seconds = 0;
+			$invalid = false;
+			foreach(explode(':', $numeric_input) as $time_segment)
+			{
+				$postfix = strtolower(substr($time_segment, -1));
+				$value = substr($time_segment, 0, -1);
+				if($value == 0 || !is_numeric($value))
+				{
+					continue;
+				}
+				switch($postfix)
+				{
+					case 'h':
+						$seconds += ($value * 3600);
+						break;
+					case 'm':
+						$seconds += ($value * 60);
+						break;
+					case 's':
+						$seconds += $value;
+						break;
+					default:
+						$invalid = true;
+						break;
+				}
+			}
+			if(!empty($seconds) && $seconds > 0 && !$invalid)
+			{
+				$numeric_input = $seconds;
 				return true;
 			}
 		}
@@ -1092,7 +1094,7 @@ class pts_test_result_parser
 		$frame_time_values = null;
 		$returns = false;
 
-		if($template == 'libframetime-output')
+		if($template == 'libframetime-output' || $template == 'libframetime-output-no-limit')
 		{
 			$returns = true;
 			$frame_time_values = array();
@@ -1105,7 +1107,7 @@ class pts_test_result_parser
 					{
 						$frametime = substr($v, 10);
 						$frametime = substr($frametime, 0, -3);
-						if($frametime > 2000)
+						if($template == 'libframetime-output-no-limit' || $frametime > 2000)
 						{
 							$frametime = $frametime / 1000;
 							$frame_time_values[] = $frametime;

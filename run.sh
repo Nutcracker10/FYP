@@ -88,4 +88,6 @@ if (( $OPTIND == 1 )); then
     esac
   done
 
+  ./scripts/optimise.py
+
 fi

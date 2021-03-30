@@ -7,7 +7,7 @@ projectRoot=$(pwd)
 #  exit 1
 #fi
 
-while getopts ":hlqr" opt; do
+while getopts ":hloqr" opt; do
   case ${opt} in 
 
     h ) # Help
@@ -17,7 +17,11 @@ while getopts ":hlqr" opt; do
     l ) #List all installed tests
         phoronix-test-suite list-installed-tests
       ;;
-    
+
+    o ) #Suggest optimal result from testfile
+        ./scripts/optimise.py
+      ;;
+
     q ) # Quick - Go straight to running tests
         echo "Test (suite) to run:"
         read test_to_run
@@ -49,10 +53,16 @@ while getopts ":hlqr" opt; do
 done
 
 if (( $OPTIND == 1 )); then
+  
+  
+
   sudo "./scripts/install.sh"
+
   started=$(date +%s)
+  
   #run most recent test suite
   phoronix-test-suite batch-run $(ls -t /home/${SUDO_USER:-${USER}}/.phoronix-test-suite/test-suites/local/ | head -1)
+  
   now=$(date +%s)
   difference=$(expr $now - $started)
   
@@ -75,5 +85,7 @@ if (( $OPTIND == 1 )); then
             break;;
 
       No) exit;;
+    esac
+  done
 
 fi

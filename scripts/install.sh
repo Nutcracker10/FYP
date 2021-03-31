@@ -7,10 +7,12 @@ if [ ! -e "$projectRoot/.token" ]; then
   cd "$projectRoot/benchmarks/phoronix-test-suite/"
   ./install-sh
   touch $projectRoot/.token
+
+  #Ensure correct batch run
+  cp "./.user-config.xml" "/home/${SUDO_USER:-${USER}}/.phoronix-test-suite/user-config.xml"
 fi
 
 #Create TestFile dir and allow user to specify tests
-
 if [ ! -d "$projectRoot/testfiles" ]; then 
   mkdir "$projectRoot/testfiles"
 fi
@@ -37,6 +39,3 @@ while IFS= read -r line
   fi
   yes | phoronix-test-suite install-test $line
 done < $testfile
-
-#Ensure correct batch run
-cp "./.user-config.xml" "/home/${SUDO_USER:-${USER}}/.phoronix-test-suite/user-config.xml"

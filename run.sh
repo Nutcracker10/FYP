@@ -46,7 +46,7 @@ while getopts ":hiloqr" opt; do
       ;;
     
     r ) # Remove all installed tests
-        echo "Removing installed tests"
+        echo "Removing all installed tests"
         rm -rf /home/${SUDO_USER:-${USER}}/.phoronix-test-suite/installed-tests/
       ;;
 

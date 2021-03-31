@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 projectRoot=$(pwd)
 
 if [ ! -e "$projectRoot/.token" ]; then
@@ -26,7 +25,7 @@ if [  $(wc -l < $testfile) -eq 0 ]; then
   echo "#Enter the tests you wish to install on their own line" >> $testfile
 fi
 
-#"${EDITOR:-vi}" $testfile
+"${EDITOR:-vi}" $testfile
 
 #Read tests from testfile and install them
 
@@ -41,6 +40,3 @@ done < $testfile
 
 #Ensure correct batch run
 cp "./.user-config.xml" "/home/${SUDO_USER:-${USER}}/.phoronix-test-suite/user-config.xml"
-
-echo "Create the suite of tests you wish to run"
-phoronix-test-suite build-suite

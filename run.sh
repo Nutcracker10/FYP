@@ -54,9 +54,13 @@ done
 
 if (( $OPTIND == 1 )); then
   
-  
+  if [ ! -e "./.token" ]; then
+    sudo "./scripts/install.sh"
+  fi
 
-  sudo "./scripts/install.sh"
+  echo "Create the suite of tests you wish to run"
+  phoronix-test-suite build-suite
+  
 
   started=$(date +%s)
   
@@ -69,22 +73,22 @@ if (( $OPTIND == 1 )); then
   ./scripts/parser.sh
   
   echo "Do you wish to save the time taken to run benchmarks as dimension?"
-  select yn in "Yes" "No"; do
+  select yn in "yes" "no"; do
     case $yn in 
-      Yes)  echo "$difference," >> "./results/test_results.csv"; break;;
-      No)   exit;;
+      yes)  echo "$difference," >> "./results/test_results.csv"; break;;
+      no)   exit;;
     esac
   done
 
-  echo "Do you wish to add a dimension?"
-  select yn in "Yes" "No"; do
+  echo "Do you wish to add a dimension from outside of the benchmarks?(i.e cost of machine)"
+  select yn in "yes" "no"; do
     case $yn in 
-      Yes)  echo "Enter value: ";
+      yes)  echo "Enter value: ";
             read value ;
             echo "$value," >> "./results/test_results.csv";
             break;;
 
-      No) exit;;
+      no) exit;;
     esac
   done
 

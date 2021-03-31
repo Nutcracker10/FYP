@@ -7,11 +7,15 @@ projectRoot=$(pwd)
 #  exit 1
 #fi
 
-while getopts ":hloqr" opt; do
+while getopts ":hiloqr" opt; do
   case ${opt} in 
 
     h ) # Help
         echo "help"
+      ;;
+
+    i) #Install new tests
+       ./scripts/install.sh
       ;;
 
     l ) #List all installed tests
@@ -32,16 +36,16 @@ while getopts ":hloqr" opt; do
         ./scripts/parser.sh
         
         echo "Do you wish to save the time taken to run benchmarks as dimension?"
-        select yn in "Yes" "No"; do
+        select yn in "yes" "no"; do
           case $yn in 
-            Yes) echo $difference"," >> "./results/test_results.csv"; break;;
-            No) exit;;
+            yes) echo $difference"," >> "./results/test_results.csv"; break;;
+            no) exit;;
           esac
         done
       
       ;;
     
-    r ) # Remove installed tests
+    r ) # Remove all installed tests
         echo "Removing installed tests"
         rm -rf /home/${SUDO_USER:-${USER}}/.phoronix-test-suite/installed-tests/
       ;;

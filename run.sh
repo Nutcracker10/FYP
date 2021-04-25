@@ -76,7 +76,7 @@ if (( $OPTIND == 1 )); then
   
   ./scripts/parser.sh
   
-  echo "Do you wish to save the time taken to run benchmarks as dimension?"
+  echo "Do you wish to save the time taken to run benchmarks as a dimension?"
   select yn in "yes" "no"; do
     case $yn in 
       yes)  echo "$difference," >> "./results/test_results.csv"; break;;

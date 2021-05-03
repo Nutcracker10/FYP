@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #data = np.array(np.random.rand(50, 3))
-data = np.genfromtxt('./results/results.csv', delimiter=',')
+data = np.genfromtxt('./results/test_results.csv', delimiter=',')
 
 def find_pareto(data):
   points = data[data.sum(1).argsort()[::1]]

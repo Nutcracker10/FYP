@@ -4,7 +4,6 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-#data = np.array(np.random.rand(50, 3))
 data = np.genfromtxt('./results/test_results.csv', delimiter=',')
 
 def find_pareto(data):
@@ -23,8 +22,6 @@ def find_pareto(data):
   return points
 
 def print2D(points, data):
-  #plt.plot(data[0,:], data[1,:], '.b', markersize=16, label= 'Data Set')
-  #plt.plot(points[0,:], points[1,:], '.r', markersize=16, label= 'Pareto Optimal')
 
   plt.scatter(points[:,0], points[:,1], c='r')
   plt.scatter(data[:,0], points[:,1], c='b')
@@ -32,8 +29,6 @@ def print2D(points, data):
   plt.ylabel('OBJ 2', fontsize=16)
   plt.xticks([])
   plt.yticks([])
-
-  #plt.show()
 
   plt.savefig('./results/result.png')
 
@@ -57,7 +52,6 @@ def print3D(points, data):
   ax.set_ylabel('OBJ 2', fontsize=16)
   ax.set_zlabel('OBJ 3', fontsize=16)
 
-  #plt.show()
   plt.savefig('./results/result.png')
 
 points = find_pareto(data)

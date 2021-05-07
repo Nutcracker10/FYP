@@ -23,12 +23,10 @@ def find_pareto(data):
 
 def print2D(points, data):
 
-  plt.scatter(points[:,0], points[:,1], c='r')
-  plt.scatter(data[:,0], points[:,1], c='b')
+  plt.scatter(data[:,0], data[:,1], c='b')
+  plt.scatter(points[0], points[1], c='r')
   plt.xlabel('OBJ 1', fontsize=16)
   plt.ylabel('OBJ 2', fontsize=16)
-  plt.xticks([])
-  plt.yticks([])
 
   plt.savefig('./results/result.png')
 
@@ -37,16 +35,16 @@ def print3D(points, data):
   fig = plt.figure()
   ax = fig.add_subplot(111, projection='3d')
 
-  x = points[:,0]
-  y = points[:,1]
-  z = points[:,2] * 50
+  x = points[0]
+  y = points[1]
+  z = points[2]
 
   x1 = data[:,0]
   y1 = data[:,1]
-  z1 = data[:,2] * 50
+  z1 = data[:,2]
   
-  ax.scatter(x,y,z, c='r')
   ax.scatter(x1,y1,z1, c='b')
+  ax.scatter(x,y,z, c='r')
 
   ax.set_xlabel('OBJ 1', fontsize=16)
   ax.set_ylabel('OBJ 2', fontsize=16)
@@ -57,9 +55,9 @@ def print3D(points, data):
 points = find_pareto(data)
 
 if (points.shape[1] == 2):
-  print2D(points, data)
+  print2D(points[-1], data)
 elif (points.shape[1] == 3):
-  print3D(points, data)
+  print3D(points[-1], data)
 else :
   print(points)
 

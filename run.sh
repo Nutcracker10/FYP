@@ -11,7 +11,7 @@ while getopts ":hiloqr" opt; do
   case ${opt} in 
 
     h ) # Help
-        echo "help"
+        cat './.help'
       ;;
 
     i) #Install new tests
